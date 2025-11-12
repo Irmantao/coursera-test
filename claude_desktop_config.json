@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "yazio": {
+      "command": "npx",
+      "args": ["-y", "yazio-mcp"],
+      "env": {
+        "YAZIO_USERNAME": "your_email@email.com",
+        "YAZIO_PASSWORD": "your_password"
+      }
+    }
+  }
+}
