@@ -7,6 +7,14 @@
         "YAZIO_USERNAME": "irmantao@gmail.com",
         "YAZIO_PASSWORD": "Juratele87"
       }
+    },
+    "redmine": {
+      "command": "uvx",
+      "args": ["--from", "mcp-redmine==2025.09.03.141435", "--refresh-package", "mcp-redmine", "mcp-redmine"],
+      "env": {
+        "REDMINE_URL": "https://itg.vilnius.lt",
+        "REDMINE_API_KEY": "01304d7491aad7c8968389c93c1d783f7141f2cc"
+      }
     }
   }
 }
