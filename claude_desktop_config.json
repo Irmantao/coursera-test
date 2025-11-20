@@ -15,6 +15,20 @@
         "REDMINE_URL": "https://itg.vilnius.lt",
         "REDMINE_API_KEY": "01304d7491aad7c8968389c93c1d783f7141f2cc"
       }
+    },
+    "jefitWorkouts": {
+      "type": "stdio",
+      "command": "/Users/irmantas/.local/bin/uv",
+      "args": ["run", "--directory", "/Users/irmantas/Documents/jefit-mcp", "python", "server.py"],
+      "env": {
+        "JEFIT_USERNAME": "irmantao@gmail.com",
+        "JEFIT_PASSWORD": "Meshkajim.87",
+        "JEFIT_TIMEZONE": "+02:00"
+      }
     }
+  },
+  "preferences": {
+    "menuBarEnabled": false,
+    "quickEntryShortcut": "off"
   }
 }
