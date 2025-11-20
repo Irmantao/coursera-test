@@ -21,7 +21,7 @@
       "command": "/Users/irmantas/.local/bin/uv",
       "args": ["run", "--directory", "/Users/irmantas/Documents/jefit-mcp", "python", "server.py"],
       "env": {
-        "JEFIT_USERNAME": "irmantao@gmail.com",
+        "JEFIT_USERNAME": "irmantux@gmail.com",
         "JEFIT_PASSWORD": "Meshkajim.87",
         "JEFIT_TIMEZONE": "+02:00"
       }
