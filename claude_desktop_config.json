@@ -9,7 +9,7 @@
       }
     },
     "redmine": {
-      "command": "uvx",
+      "command": "/Users/irmantas/.local/bin/uvx",
       "args": ["--from", "mcp-redmine==2025.09.03.141435", "--refresh-package", "mcp-redmine", "mcp-redmine"],
       "env": {
         "REDMINE_URL": "https://itg.vilnius.lt",
