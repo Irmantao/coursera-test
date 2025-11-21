@@ -8,12 +8,13 @@ This document provides comprehensive guidance for AI assistants (like Claude) wo
 2. [Current Structure](#current-structure)
 3. [Development Workflow](#development-workflow)
 4. [Git Conventions](#git-conventions)
-5. [File Organization](#file-organization)
-6. [Code Style Guidelines](#code-style-guidelines)
-7. [Testing Strategy](#testing-strategy)
-8. [Documentation Standards](#documentation-standards)
-9. [AI Assistant Best Practices](#ai-assistant-best-practices)
-10. [Common Tasks](#common-tasks)
+5. [Security Best Practices](#security-best-practices)
+6. [File Organization](#file-organization)
+7. [Code Style Guidelines](#code-style-guidelines)
+8. [Testing Strategy](#testing-strategy)
+9. [Documentation Standards](#documentation-standards)
+10. [AI Assistant Best Practices](#ai-assistant-best-practices)
+11. [Common Tasks](#common-tasks)
 
 ---
 
@@ -38,8 +39,11 @@ This document provides comprehensive guidance for AI assistants (like Claude) wo
 ```
 coursera-test/
 ├── .git/                 # Git repository metadata
+├── .gitignore           # Git ignore rules for sensitive files
+├── .env.example         # Environment variables template
 ├── README.md            # Repository description
-└── CLAUDE.md            # This file - AI assistant guide
+├── CLAUDE.md            # This file - AI assistant guide
+└── SECURITY_GUIDE.md    # Security procedures and credential removal guide
 ```
 
 ### Directory Purpose
@@ -127,6 +131,126 @@ Added null checks before accessing nested properties.
 - **Create branches**: Use `git checkout -b claude/<session-id>` for new branches
 - **Never**: Force push without explicit permission
 - **Never**: Modify main/master branch directly
+
+---
+
+## Security Best Practices
+
+### Credential Management
+
+**CRITICAL**: Never commit sensitive information to the repository. This includes:
+
+- Passwords and API keys
+- Database connection strings with credentials
+- Private keys and certificates
+- Access tokens and secrets
+- Environment-specific configuration with sensitive data
+
+### Using Environment Variables
+
+1. **Store credentials in .env files**:
+   - Copy `.env.example` to `.env`
+   - Fill in your actual credentials in `.env`
+   - `.env` is in `.gitignore` and will never be committed
+
+2. **Example usage**:
+   ```javascript
+   // Node.js example
+   require('dotenv').config();
+   const apiKey = process.env.API_KEY;
+   ```
+
+   ```python
+   # Python example
+   import os
+   from dotenv import load_dotenv
+   load_dotenv()
+   api_key = os.getenv('API_KEY')
+   ```
+
+3. **Update .env.example**:
+   - When adding new environment variables, update `.env.example`
+   - Use placeholder values, never real credentials
+   - Document what each variable is for
+
+### Files to Never Commit
+
+The `.gitignore` file protects against committing:
+
+- `.env`, `.env.*` - Environment variables
+- `**/credentials.*`, `**/secrets.*` - Credential files
+- `**/*.pem`, `**/*.key` - Private keys
+- `**/password*`, `**/token*` - Password/token files
+- Cloud provider credentials (`.aws/credentials`, etc.)
+
+### What to Do If Credentials Were Committed
+
+If credentials were accidentally committed to the repository:
+
+1. **IMMEDIATELY rotate/change the exposed credentials**
+   - Change passwords
+   - Regenerate API keys
+   - Revoke access tokens
+
+2. **Remove from git history** (see SECURITY_GUIDE.md for detailed steps):
+   ```bash
+   # Option 1: Using git filter-repo (recommended)
+   git filter-repo --path-match path/to/sensitive/file --invert-paths
+
+   # Option 2: Using BFG Repo-Cleaner
+   bfg --delete-files credentials.json
+   bfg --replace-text passwords.txt
+   ```
+
+3. **Force push to update remote**:
+   ```bash
+   git push origin --force --all
+   ```
+
+4. **Notify team members** to re-clone the repository
+
+### AI Assistant Security Responsibilities
+
+When working with this repository, AI assistants MUST:
+
+1. **Never generate or commit real credentials**
+2. **Always use .env files for sensitive configuration**
+3. **Check for credential patterns before committing**
+4. **Warn users if sensitive files are about to be committed**
+5. **Refuse to commit files like**:
+   - `.env` (unless specifically `.env.example`)
+   - `credentials.json`, `secrets.yaml`, etc.
+   - Any file containing passwords or API keys
+
+### Security Scanning
+
+Before committing, check for common credential patterns:
+
+```bash
+# Search for potential secrets
+grep -r -E "(password|passwd|pwd|api_key|secret|token|auth)[\s]*[=:]" --exclude-dir=.git --exclude="*.md" .
+
+# Use git-secrets (if installed)
+git secrets --scan
+```
+
+### Code Security
+
+Avoid common vulnerabilities:
+
+1. **SQL Injection**: Use parameterized queries
+2. **XSS**: Sanitize user input, escape output
+3. **CSRF**: Use CSRF tokens for state-changing operations
+4. **Command Injection**: Never pass unsanitized input to system commands
+5. **Path Traversal**: Validate file paths
+6. **Insecure Dependencies**: Keep dependencies updated
+
+### Encryption and Hashing
+
+- **Passwords**: Always hash (bcrypt, argon2, etc.), never store plaintext
+- **Sensitive data**: Encrypt at rest and in transit
+- **API communication**: Use HTTPS/TLS
+- **Tokens**: Use secure, random generation (crypto libraries)
 
 ---
 
@@ -368,6 +492,12 @@ If you encounter issues or have questions about conventions:
 ---
 
 ## Version History
+
+- **2025-11-21**: Security update
+  - Added comprehensive security best practices section
+  - Created .gitignore to protect sensitive files
+  - Added .env.example template for credentials
+  - Added AI assistant security responsibilities
 
 - **2025-11-21**: Initial version created
   - Established basic structure
