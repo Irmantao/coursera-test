@@ -17,9 +17,8 @@
       }
     },
     "jefitWorkouts": {
-      "type": "stdio",
       "command": "/Users/irmantas/.local/bin/uv",
-      "args": ["run", "--directory", "/Users/irmantas/Documents/jefit-mcp", "python", "server.py"],
+      "args": ["run", "python", "/Users/irmantas/Documents/jefit-mcp/server.py"],
       "env": {
         "JEFIT_USERNAME": "irmantux@gmail.com",
         "JEFIT_PASSWORD": "Meshkajim.87",
